@@ -11,8 +11,13 @@ dotenv.config(); // Charger les variables d'environnement
 const login = (req, res) => {
   const { email, password } = req.body;
 
+  // Vérifier si l'email et le mot de passe sont fournis
+  if (!email || !password) {
+    return res.status(400).json({ message: 'Email et mot de passe sont requis.' });
+  }
+
   // Requête SQL pour trouver l'utilisateur
-  db.query('SELECT id,email,password,type_account,is_admin FROM users WHERE email = ?', [email], (err, results) => {
+  db.query('SELECT id, email, password, type_account, is_admin FROM users WHERE email = ?', [email], (err, results) => {
     if (err) {
       console.error('Erreur lors de la requête SQL:', err);
       return res.status(500).send('Erreur serveur');
@@ -23,7 +28,7 @@ const login = (req, res) => {
       return res.status(401).json({ message: 'Email incorrect !' });
     }
 
-    // Récupérer le mot de passe haché depuis la base de données
+    // Récupérer l'utilisateur trouvé dans la base de données
     const user = results[0];
 
     // Comparaison du mot de passe envoyé avec le mot de passe haché dans la base de données
@@ -34,9 +39,10 @@ const login = (req, res) => {
       }
 
       if (!isMatch) {
-        return res.status(401).json({ message: 'Mot de pass incorrecte !' });
+        return res.status(401).json({ message: 'Mot de passe incorrect !' });
       }
 
+      // Sauvegarder les informations dans la session
       req.session.userId = user.id;  // Sauvegarder l'ID de l'utilisateur dans la session
       req.session.userEmail = user.email;  // Sauvegarder l'email dans la session
        
@@ -44,9 +50,10 @@ const login = (req, res) => {
       const token = jwt.sign(
         { email: user.email, id: user.id },
         process.env.JWT_SECRET,
-        { expiresIn: '3h' }
+        { expiresIn: '3h' }  // Le token expire après 3 heures
       );
 
+      // Répondre avec le token et les informations de session
       res.json({
         accessToken: token,
         session: {
@@ -58,11 +65,9 @@ const login = (req, res) => {
   });
 };
 
-
-const forgotPassword =(req, res) =>{
-
-
-
+// Fonction pour réinitialiser le mot de passe (à compléter)
+const forgotPassword = (req, res) => {
+  // Cette fonction peut être développée pour gérer la réinitialisation du mot de passe
 };
 
-module.exports = { login,forgotPassword };
+module.exports = { login, forgotPassword };

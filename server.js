@@ -34,7 +34,7 @@ const port = process.env.PORT || 5000;
 
 // Middleware CORS pour React.js
 const corsOptions = {
-  origin: 'http://localhost:3000',  // Autoriser l'accès uniquement depuis localhost:3000 (où React.js tourne en développement)
+  origin: 'http://localhost:3000',  // Autoriser l'accès uniquement a url de mon projet react js
   methods: 'GET,POST,PUT,DELETE',  // Méthodes autorisées pour les requêtes
   allowedHeaders: 'Content-Type,Authorization',  // En-têtes autorisés
   credentials: true,  // Si vous voulez accepter les cookies ou tokens
