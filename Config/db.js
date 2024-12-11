@@ -12,6 +12,7 @@ const db = mysql.createConnection({
   user: process.env.DB_USER,       // Utilisateur de la base de données
   password: process.env.DB_PASSWORD, // Mot de passe
   database: process.env.DB_NAME    // Nom de la base de données
+  
 });
 
 // Connexion à la base de données
