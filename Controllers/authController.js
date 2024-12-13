@@ -17,7 +17,7 @@ const login = (req, res) => {
   }
 
   // Requête SQL pour trouver l'utilisateur
-  db.query('SELECT id, email, password, type_account, is_admin FROM users WHERE email = ?', [email], (err, results) => {
+  db.query('SELECT id, email, password  FROM prepa_users WHERE email = ?', [email], (err, results) => {
     if (err) {
       console.error('Erreur lors de la requête SQL:', err);
       return res.status(500).send('Erreur serveur');
@@ -45,10 +45,11 @@ const login = (req, res) => {
       // Sauvegarder les informations dans la session
       req.session.userId = user.id;  // Sauvegarder l'ID de l'utilisateur dans la session
       req.session.userEmail = user.email;  // Sauvegarder l'email dans la session
+    
        
       // Générer un token JWT
       const token = jwt.sign(
-        { email: user.email, id: user.id },
+        { email: user.email, id: user.id ,is_admin:user.is_admin},
         process.env.JWT_SECRET,
         { expiresIn: '3h' }  // Le token expire après 3 heures
       );
@@ -58,7 +59,7 @@ const login = (req, res) => {
         accessToken: token,
         session: {
           userId: req.session.userId,  // Renvoi de l'ID de l'utilisateur
-          userEmail: req.session.userEmail  // Renvoi de l'email de l'utilisateur
+          userEmail: req.session.userEmail
         }
       });
     });

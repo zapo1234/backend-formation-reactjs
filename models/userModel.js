@@ -4,7 +4,7 @@ const db = require('../Config/db.js');  // Connexion à la base de données
 // Fonction pour récupérer tous les utilisateurs
 const getAllUsers = () => {
   return new Promise((resolve, reject) => {
-    const query = 'SELECT id,name, username, email,attribut FROM users';  // Requête pour récupérer tous les utilisateurs
+    const query = 'SELECT id,name, identifier, email FROM prepa_users';  // Requête pour récupérer tous les utilisateurs
     db.query(query, (err, results) => {
       if (err) {
         return reject(err);  // Retourner l'erreur
@@ -17,7 +17,7 @@ const getAllUsers = () => {
 // Fonction pour récupérer un utilisateur par ID
 const getUserById = (userId) => {
   return new Promise((resolve, reject) => {
-    const query = 'SELECT name, username, email FROM users WHERE id = ?';  // Requête pour récupérer un utilisateur par ID
+    const query = 'SELECT name, username, email FROM prepa_users  WHERE id = ?';  // Requête pour récupérer un utilisateur par ID
     db.query(query, [userId], (err, results) => {
       if (err) {
         return reject(err);  // Retourner l'erreur
